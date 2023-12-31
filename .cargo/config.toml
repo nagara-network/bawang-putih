@@ -1,0 +1,47 @@
+[build]
+target = "thumbv6m-none-eabi"
+
+[target.thumbv6m-none-eabi]
+rustflags = [
+    "-C",
+    "linker=flip-link",
+    "-C",
+    "link-arg=--nmagic",
+    "-C",
+    "link-arg=-Tlink.x",
+    "-C",
+    "link-arg=-Tlink-rp.x",
+    "-Z",
+    "trap-unreachable=no",
+    "-C",
+    "inline-threshold=5",
+    "-C",
+    "no-vectorize-loops",
+    "-C",
+    "target-cpu=cortex-m0plus",
+]
+
+runner = "elf2uf2-rs -d"
+
+[profile.dev]
+codegen-units = 1
+debug = 2
+debug-assertions = true
+incremental = false
+opt-level = 3
+overflow-checks = true
+
+[profile.release]
+codegen-units = 1
+debug = false
+debug-assertions = false
+incremental = false
+lto = "fat"
+opt-level = 3
+overflow-checks = false
+strip = true
+
+[env]
+CC = "clang-17"
+CXX = "clang-17"
+DEFMT_LOG = "info"
